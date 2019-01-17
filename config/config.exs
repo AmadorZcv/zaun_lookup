@@ -7,8 +7,7 @@
 # General application configuration
 use Mix.Config
 
-config :zaun_lookup,
-  ecto_repos: [ZaunLookup.Repo]
+config :zaun_lookup, ecto_repos: [ZaunLookup.Repo]
 
 # Configures the endpoint
 config :zaun_lookup, ZaunLookupWeb.Endpoint,
@@ -24,6 +23,12 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+config :zaun_lookup, ZaunLookup.Scheduler,
+  jobs: [
+    # Every minute
+    {{:extended, "* * * * *"}, fn -> IO.puts("Hello Zaun") end}
+  ]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

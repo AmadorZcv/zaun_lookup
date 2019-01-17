@@ -69,7 +69,7 @@ config :phoenix, :plug_init_mode, :runtime
 # Configure your database
 config :zaun_lookup, ZaunLookup.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "root",
   database: "zaun_lookup_dev",
   hostname: "localhost",
   pool_size: 10
