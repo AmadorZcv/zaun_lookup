@@ -1,5 +1,5 @@
 defmodule ZaunLookup.Riot.Routes do
-  alias Riot.Endpoints
+  alias ZaunLookup.Riot.Endpoints
   @summoners "lol/summoner/v4/summoners/"
   @summoner_by_puuid "#{@summoners}by-puuid/"
   @summoner_by_summoner_name "#{@summoners}by-name/"
