@@ -16,7 +16,9 @@ defmodule ZaunLookup.Riot do
   end
 
   def set_tops_of_regions() do
-    Enum.each(@regions, &set_top_of_region(&1))
+    #Enum.each(@regions, &set_top_of_region(&1))
+    Task.async_stream(@regions, & set_top_of_region(&1), [timeout: 60000, max_concurrency: 12])
+    |> Enum.to_list()
   end
 
   def set_top_of_region(region) do

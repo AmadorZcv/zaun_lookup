@@ -15,6 +15,7 @@ defmodule ZaunLookup.Tracker do
     IO.puts("Works?")
     # Do the work you desire here
     # Reschedule once more
+
     schedule_work()
     {:noreply, state}
   end
@@ -22,6 +23,6 @@ defmodule ZaunLookup.Tracker do
   defp schedule_work() do
     IO.puts("Schedule")
     # In 2 hours
-    Process.send_after(self(), :work, 10000)
+    Process.send_after(self(), :work, 120300 )
   end
 end

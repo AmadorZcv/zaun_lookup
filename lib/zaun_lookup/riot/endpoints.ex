@@ -11,7 +11,7 @@ defmodule ZaunLookup.Riot.Endpoints do
   @oce "#{@https}oc1.api.riotgames.com/"
   @tr "#{@https}tr1.api.riotgames.com/"
   @ru "#{@https}ru.api.riotgames.com/"
-  @pbe "#{@https}pbe1.api.riotgames.com/"
+  #@pbe "#{@https}pbe1.api.riotgames.com/"
 
   def get_endpoint(region) do
     case region do
@@ -48,10 +48,10 @@ defmodule ZaunLookup.Riot.Endpoints do
       "RU" ->
         @ru
 
-      "PBE" ->
-        @pbe
+      #"PBE" ->
+       # @pbe
     end
   end
-  @regions ["BR","EUNE","JP","KR","LAN","LAS","NA","OCE","TR","RU","PBE"]
+  @regions ["BR","EUNE","JP","KR","LAN","LAS","NA","OCE","TR","RU"]
   def regions, do: @regions
 end
