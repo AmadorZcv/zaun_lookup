@@ -11,9 +11,10 @@ defmodule ZaunLookup.Application do
       # Start the Ecto repository
       ZaunLookup.Repo,
       # Start the endpoint when the application starts
-      ZaunLookupWeb.Endpoint
+      ZaunLookupWeb.Endpoint,
       # Starts a worker by calling: ZaunLookup.Worker.start_link(arg)
       # {ZaunLookup.Worker, arg},
+      ZaunLookup.Tracker
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
