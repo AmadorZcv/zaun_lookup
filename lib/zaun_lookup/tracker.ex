@@ -6,6 +6,7 @@ defmodule ZaunLookup.Tracker do
 
   def init(state) do
     # Schedule work to be performed at some point
+    ZaunLookup.Riot.set_tops_of_regions()
     schedule_work()
     {:ok, state}
   end

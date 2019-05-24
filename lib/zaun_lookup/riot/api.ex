@@ -3,7 +3,7 @@ defmodule ZaunLookup.Riot.Api do
 
   def request(url) do
     headers = ["X-Riot-Token": "RGAPI-4da6aa59-c677-493f-ab26-5ebecfdd3241"]
-    HTTPoison.get!(url, headers)
+    HTTPoison.get!(url, headers).body |> Jason.decode!()
   end
 
   def get_summoner_by_name(region, name) do
@@ -24,4 +24,19 @@ defmodule ZaunLookup.Riot.Api do
     url = Routes.matches_by_account_id(region, account_id)
     request(url)
   end
+
+  def get_challenger_by_queue(region,queue) do
+    url = Routes.challenger_by_queue(region, queue)
+    request(url)
+  end
+
+  def get_grandmaster_by_queue(region,queue) do
+    url = Routes.grandmaster_by_queue(region, queue)
+    request(url)
+  end
+  def get_master_by_queue(region,queue) do
+    url = Routes.master_by_queue(region, queue)
+    request(url)
+  end
+
 end
