@@ -8,6 +8,6 @@ defmodule ZaunLookup.Repo.Migrations.AddTrackingUser do
       add :points, :integer
       add :tier, :string
     end
-    create unique_index(:users, [:region, :riot_id])
+    create unique_index(:users, [:region, :riot_id],name: :unique_on_region)
   end
 end

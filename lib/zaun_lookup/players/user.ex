@@ -20,5 +20,6 @@ defmodule ZaunLookup.Players.User do
     user
     |> cast(attrs, [:name, :puuid, :account_id, :riot_id, :revision_date,:last_updated,:region,:points])
     |> unique_constraint(:puuid)
+    |> unique_constraint(:unique_on_region, name: :unique_on_region)
   end
 end
