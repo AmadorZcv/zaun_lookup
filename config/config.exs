@@ -7,12 +7,13 @@
 # General application configuration
 use Mix.Config
 
-config :zaun_lookup, ecto_repos: [ZaunLookup.Repo]
+config :zaun_lookup,
+  ecto_repos: [ZaunLookup.Repo]
 
 # Configures the endpoint
 config :zaun_lookup, ZaunLookupWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "n9M/JzyvB4oJFvzqrRn68c21yWB3ADYslOKWZlMfvGcurXPKSaWUYkSMwpLSfAfG",
+  secret_key_base: "t4uB1zvI/FBDlVpvLgW1n5K6LqxFIBJfuhr2wXNl9WSbMklrYhTDzAawolPZcXDV",
   render_errors: [view: ZaunLookupWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: ZaunLookup.PubSub, adapter: Phoenix.PubSub.PG2]
 
@@ -23,12 +24,6 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
-
-config :zaun_lookup, ZaunLookup.Scheduler,
-  jobs: [
-    # Every minute
-    {{:extended, "* * * * *"}, fn -> IO.puts("Hello Zaun") end}
-  ]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

@@ -40,7 +40,7 @@ defmodule ZaunLookupWeb.Endpoint do
   plug Plug.Session,
     store: :cookie,
     key: "_zaun_lookup_key",
-    signing_salt: "P2gi+0Ne"
+    signing_salt: "dkTDNZlU"
 
   plug ZaunLookupWeb.Router
 end
