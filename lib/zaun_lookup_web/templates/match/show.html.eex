@@ -1,0 +1,63 @@
+<h1>Show Match</h1>
+
+<ul>
+
+  <li>
+    <strong>Season:</strong>
+    <%= @match.season_id %>
+  </li>
+
+  <li>
+    <strong>Queue:</strong>
+    <%= @match.queue_id %>
+  </li>
+
+  <li>
+    <strong>Game:</strong>
+    <%= @match.game_id %>
+  </li>
+
+  <li>
+    <strong>Game version:</strong>
+    <%= @match.game_version %>
+  </li>
+
+  <li>
+    <strong>Platform:</strong>
+    <%= @match.platform_id %>
+  </li>
+
+  <li>
+    <strong>Game mode:</strong>
+    <%= @match.game_mode %>
+  </li>
+
+  <li>
+    <strong>Map:</strong>
+    <%= @match.map_id %>
+  </li>
+
+  <li>
+    <strong>Game type:</strong>
+    <%= @match.game_type %>
+  </li>
+
+  <li>
+    <strong>Game duration:</strong>
+    <%= @match.game_duration %>
+  </li>
+
+  <li>
+    <strong>Game creation:</strong>
+    <%= @match.game_creation %>
+  </li>
+
+  <li>
+    <strong>Winning team:</strong>
+    <%= @match.winning_team %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.match_path(@conn, :edit, @match) %></span>
+<span><%= link "Back", to: Routes.match_path(@conn, :index) %></span>

@@ -17,6 +17,8 @@ defmodule ZaunLookupWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    resources("/player", UserController)
+    get "/mathes", MatchController,:index
   end
 
   # Other scopes may use custom stacks.
