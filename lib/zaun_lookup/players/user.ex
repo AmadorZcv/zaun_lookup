@@ -8,14 +8,14 @@ defmodule ZaunLookup.Players.User do
     field :puuid, :string
     field :revision_date, :integer
     field :riot_id, :string
-
+    field :last_updated, :time
     timestamps()
   end
 
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:name, :puuid, :account_id, :riot_id, :revision_date])
+    |> cast(attrs, [:name, :puuid, :account_id, :riot_id, :revision_date,:last_updated])
     |> validate_required([:name, :puuid, :account_id, :riot_id, :revision_date])
     |> unique_constraint(:puuid)
   end
