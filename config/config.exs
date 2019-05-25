@@ -15,7 +15,10 @@ config :zaun_lookup, ZaunLookupWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "t4uB1zvI/FBDlVpvLgW1n5K6LqxFIBJfuhr2wXNl9WSbMklrYhTDzAawolPZcXDV",
   render_errors: [view: ZaunLookupWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: ZaunLookup.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: ZaunLookup.PubSub, adapter: Phoenix.PubSub.PG2],
+  live_view: [
+    signing_salt: "DxeBhxEoL2OucYBaaLKTvzsK5gKAR5iC"
+  ]
 
 # Configures Elixir's Logger
 config :logger, :console,

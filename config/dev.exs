@@ -61,7 +61,8 @@ config :zaun_lookup, ZaunLookupWeb.Endpoint,
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/zaun_lookup_web/{live,views}/.*(ex)$",
-      ~r"lib/zaun_lookup_web/templates/.*(eex)$"
+      ~r"lib/zaun_lookup_web/templates/.*(eex)$",
+      ~r{lib/zaun_lookup_web/live/.*(ex)$}
     ]
   ]
 

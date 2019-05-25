@@ -1,6 +1,8 @@
 defmodule ZaunLookupWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :zaun_lookup
 
+  socket "/live", Phoenix.LiveView.Socket
+
   socket "/socket", ZaunLookupWeb.UserSocket,
     websocket: true,
     longpoll: false
