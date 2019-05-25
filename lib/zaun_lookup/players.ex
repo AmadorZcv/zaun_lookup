@@ -69,6 +69,7 @@ defmodule ZaunLookup.Players do
   """
   def update_user(%User{} = user, attrs) do
     IO.puts("Hehe")
+
     user
     |> User.changeset(attrs)
     |> Repo.update()
@@ -101,6 +102,43 @@ defmodule ZaunLookup.Players do
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
+  end
+
+  def user_struct_from_league(user, region) do
+    %{
+      name: user["summonerName"],
+      tier: user["rank"],
+      points: user["leaguePoints"],
+      riot_id: user["summonerId"],
+      last_updated: Time.utc_now() |> Time.truncate(:second),
+      region: region
+    }
+  end
+
+  def user_struct_from_summoner(user, region) do
+    %{
+      name: user["name"],
+      riot_id: user["id"],
+      last_updated: Time.utc_now() |> Time.truncate(:second),
+      region: region,
+      account_id: user["accountId"],
+      puuid: user["puuid"]
+    }
+  end
+
+  def create_user_from_league(user, region) do
+    user_struct_from_league(user, region)
+    |> create_user()
+  end
+
+  def update_user_from_league(updated, region, user) do
+    updated_user = user_struct_from_league(updated, region)
+    update_user(user, updated_user)
+  end
+
+  def update_user_from_summoner(updated, region, user) do
+    updated_user = user_struct_from_summoner(updated, region)
+    update_user(user, updated_user)
   end
 
   alias ZaunLookup.Players.Match

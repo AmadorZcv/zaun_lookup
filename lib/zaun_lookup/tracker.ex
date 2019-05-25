@@ -17,7 +17,7 @@ defmodule ZaunLookup.Tracker do
     |> where([u], is_nil(u.account_id))
     |> limit(^requests)
     |> Repo.all()
-    |> Enum.each(&Riot.set_player(region, &1))
+    |> Enum.each(&Riot.set_user(region, &1))
   end
 
   def player_cycle(requests) do

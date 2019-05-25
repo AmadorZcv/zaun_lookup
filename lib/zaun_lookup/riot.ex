@@ -1,71 +1,32 @@
 defmodule ZaunLookup.Riot do
   alias ZaunLookup.Riot.{Api, Endpoints}
-  alias ZaunLookup.Repo
-
-  alias ZaunLookup.Players.{User, Match}
+  alias ZaunLookup.Players
   @regions Endpoints.regions()
   @queue "RANKED_SOLO_5x5"
 
-  def player_struct_from_league(player, region) do
-    %{
-      name: player["summonerName"],
-      tier: player["rank"],
-      points: player["leaguePoints"],
-      riot_id: player["summonerId"],
-      last_updated: Time.utc_now() |> Time.truncate(:second),
-      region: region
-    }
+  def update_from_league_into_user(user_api, user, region, tier) when user_api != nil do
+    Players.update_user_from_league(
+      Map.update!(user_api, "tier", &"#{tier} #{&1})}"),
+      region,
+      user
+    )
   end
 
-  def player_struct_from_summoner(player, region) do
-    IO.inspect(player)
-    %{
-      name: player["name"],
-      riot_id: player["id"],
-      last_updated: Time.utc_now() |> Time.truncate(:second),
-      region: region,
-      account_id: player["accountId"],
-      puuid: player["puuid"]
-    }
+  def insert_from_league_into_user(user, region, tier) when user != nil do
+    Players.create_user_from_league(Map.update!(user, "tier", &"#{tier} #{&1})}"), region)
   end
 
-  def set_player(region, player) do
-    playerNew = Api.get_summoner_by_id(region, player.riot_id)
-    update_from_summoner_into_user(player, region, playerNew)
+  def set_user(region, user) do
+    Api.get_summoner_by_id(region, user.riot_id)
+    |> Players.update_user_from_summoner(region, user)
   end
 
-  def update_player(region, player) do
-    matches = Api.get_matches_by_account_id(region, player.account_id)
-
-    playerApi =
-      Api.get_league_by_summoner_id(region, player.riot_id)
+  def update_player(region, user) do
+    user_api =
+      Api.get_league_by_summoner_id(region, user.riot_id)
       |> Enum.find(fn p -> p["queueType"] == @queue end)
 
-    update_from_league_into_user(player, region, playerApi)
-    Enum.each(matches, &insert_from_matches_into_matches(&1))
-  end
-
-  def insert_from_matches_into_matches(match) do
-    Repo.insert!(%Match{
-      game_id: match["gameId"],
-      fetched: false
-    })
-  end
-
-  def update_from_league_into_user(user, region, userApi) when userApi != nil do
-    new_user = player_struct_from_league(userApi, region)
-    ZaunLookup.Players.update_user(user, new_user)
-  end
-
-  def update_from_summoner_into_user(user, region, userApi) do
-    new_user = player_struct_from_summoner(userApi, region)
-    ZaunLookup.Players.update_user(user, new_user)
-  end
-
-  def insert_from_league_into_user(user, region) when user != nil do
-    user
-    |> player_struct_from_league(region)
-    |> ZaunLookup.Players.create_user()
+    update_from_league_into_user(user_api, user, region, user_api["tier"])
   end
 
   def set_tops_of_regions() do
@@ -77,10 +38,10 @@ defmodule ZaunLookup.Riot do
   def set_top_of_region(region) do
     IO.puts("Region é #{region}")
     challengers = Api.get_challenger_by_queue(region, @queue)["entries"]
-    Enum.each(challengers, &insert_from_league_into_user(&1, region))
+    Enum.each(challengers, &insert_from_league_into_user(&1, region, "Challenger"))
     grandmasters = Api.get_grandmaster_by_queue(region, @queue)["entries"]
-    Enum.each(grandmasters, &insert_from_league_into_user(&1, region))
+    Enum.each(grandmasters, &insert_from_league_into_user(&1, region, "Grandmaster"))
     masters = Api.get_master_by_queue(region, @queue)["entries"]
-    Enum.each(masters, &insert_from_league_into_user(&1, region))
+    Enum.each(masters, &insert_from_league_into_user(&1, region, "Master"))
   end
 end
