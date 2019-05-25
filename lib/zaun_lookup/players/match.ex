@@ -14,7 +14,7 @@ defmodule ZaunLookup.Players.Match do
     field :queue_id, :integer
     field :season_id, :integer
     field :winning_team, :string
-
+    field :fetched, :boolean
     timestamps()
   end
 
@@ -32,20 +32,11 @@ defmodule ZaunLookup.Players.Match do
       :game_type,
       :game_duration,
       :game_creation,
-      :winning_team
+      :winning_team,
+      :fetched
     ])
     |> validate_required([
-      :season_id,
-      :queue_id,
-      :game_id,
-      :game_version,
-      :platform_id,
-      :game_mode,
-      :map_id,
-      :game_type,
-      :game_duration,
-      :game_creation,
-      :winning_team
+      :game_id
     ])
   end
 end
