@@ -68,6 +68,7 @@ defmodule ZaunLookup.Players do
 
   """
   def update_user(%User{} = user, attrs) do
+    IO.puts("Hehe")
     user
     |> User.changeset(attrs)
     |> Repo.update()

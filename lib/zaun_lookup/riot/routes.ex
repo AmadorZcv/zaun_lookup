@@ -5,6 +5,10 @@ defmodule ZaunLookup.Riot.Routes do
   @summoner_by_puuid "#{@summoners}by-puuid/"
   @summoner_by_summoner_name "#{@summoners}by-name/"
 
+  def summoner_by_summoner_id(region,summoner_id) do
+    endpoint = Endpoints.get_endpoint(region)
+    "#{endpoint}#{@summoners}#{summoner_id}"
+  end
   def summoner_by_summoner_name(region,name) do
     endpoint = Endpoints.get_endpoint(region)
     "#{endpoint}#{@summoner_by_summoner_name}#{name}"
