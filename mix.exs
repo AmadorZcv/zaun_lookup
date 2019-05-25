@@ -20,7 +20,7 @@ defmodule ZaunLookup.MixProject do
   def application do
     [
       mod: {ZaunLookup.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools,:timex]
     ]
   end
 
@@ -43,7 +43,8 @@ defmodule ZaunLookup.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:httpoison, "~> 1.4"}
+      {:httpoison, "~> 1.4"},
+      {:timex, "~> 3.0"}
     ]
   end
 

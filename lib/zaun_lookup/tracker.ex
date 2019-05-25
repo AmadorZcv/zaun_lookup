@@ -6,23 +6,21 @@ defmodule ZaunLookup.Tracker do
 
   def init(state) do
     # Schedule work to be performed at some point
-    ZaunLookup.Riot.set_tops_of_regions()
     schedule_work()
     {:ok, state}
   end
 
   def handle_info(:work, state) do
-    IO.puts("Works?")
+    max_requests = 100
+
     # Do the work you desire here
     # Reschedule once more
-
     schedule_work()
     {:noreply, state}
   end
 
   defp schedule_work() do
-    IO.puts("Schedule")
-    # In 2 hours
+    # In 2 minutes and change
     Process.send_after(self(), :work, 120300 )
   end
 end
