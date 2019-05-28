@@ -6,14 +6,14 @@ defmodule ZaunLookup.Riot do
 
   def update_from_league_into_user(user_api, user, region, tier) when user_api != nil do
     Players.update_user_from_league(
-      Map.update!(user_api, "tier", &"#{tier} #{&1})}"),
+      Map.update!(user_api, "rank", &"#{tier} #{&1})}"),
       region,
       user
     )
   end
 
   def insert_from_league_into_user(user, region, tier) when user != nil do
-    Players.create_user_from_league(Map.update!(user, "tier", &"#{tier} #{&1})}"), region)
+    Players.create_user_from_league(Map.update!(user, "rank", &"#{tier} #{&1})}"), region)
   end
 
   def set_user(region, user) do
