@@ -15,6 +15,8 @@ defmodule ZaunLookup.Players.Match do
     field :season_id, :integer
     field :winning_team, :string
     field :fetched, :boolean
+    has_many :teams, ZaunLookup.Players.Team
+
     timestamps()
   end
 
