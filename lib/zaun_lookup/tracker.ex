@@ -5,23 +5,27 @@ defmodule ZaunLookup.Tracker do
   alias ZaunLookup.Riot
   alias ZaunLookup.Repo
   alias ZaunLookup.Riot.Endpoints
-
+  @regions Enum.map(Endpoints.regions(), &%{region: &1, requests: 100})
   def start_link(opts) do
     GenServer.start_link(__MODULE__, %{}, opts)
   end
 
-  def player_region(region, requests) do
-    User
-    |> order_by([u], fragment("?::time", u.updated_at))
-    |> where([u], u.region == ^region)
-    |> where([u], is_nil(u.account_id))
-    |> limit(^requests)
-    |> Repo.all()
-    |> Enum.each(&Riot.set_user(region, &1))
+  def player_region(region) do
+    requests =
+      User
+      |> order_by([u], fragment("?::time", u.updated_at))
+      |> where([u], u.region == ^region[:region])
+      |> where([u], is_nil(u.account_id))
+      |> limit(^region[:requests])
+      |> Repo.all()
+      |> Enum.map(&Riot.set_user(region[:region], &1))
+      |> Enum.count()
+
+    Map.update!(region, :requests, &(&1 - requests))
   end
 
-  def player_cycle(requests) do
-    Task.async_stream(Endpoints.regions(), &player_region(&1, requests),
+  def player_cycle(regions) do
+    Task.async_stream(regions, &player_region(&1),
       timeout: 600_000,
       max_concurrency: 12
     )
@@ -29,15 +33,17 @@ defmodule ZaunLookup.Tracker do
   end
 
   def init(state) do
-    Riot.set_tops_of_regions()
     # Schedule work to be performed at some point
+    Riot.set_tops_of_regions(@regions)
     schedule_work()
     {:ok, state}
   end
 
   def handle_info(:work, state) do
     IO.puts("Player Cycle")
-    player_cycle(100)
+
+    @regions
+    |> player_cycle()
 
     # Do the work you desire here
     # Reschedule once more
