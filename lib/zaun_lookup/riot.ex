@@ -1,7 +1,6 @@
 defmodule ZaunLookup.Riot do
-  alias ZaunLookup.Riot.{Api, Endpoints}
+  alias ZaunLookup.Riot.Api
   alias ZaunLookup.Players
-  @regions Endpoints.regions()
   @queue "RANKED_SOLO_5x5"
 
   def update_from_league_into_user(user_api, user, region, tier) when user_api != nil do
