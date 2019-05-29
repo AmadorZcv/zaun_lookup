@@ -43,4 +43,12 @@ defmodule ZaunLookup.Riot do
     Enum.each(masters, &insert_from_league_into_user(&1, region[:region], "Master"))
     Map.update!(region, :requests, &(&1 - 3))
   end
+
+  def set_match_from_detail(region,match) do
+    match_api = Api.get_match_by_id(region, match.game_id)
+    Players.update_match_from_match_detail(match_api)
+  end
+
+
+
 end

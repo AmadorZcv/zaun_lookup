@@ -257,15 +257,16 @@ defmodule ZaunLookup.Players do
   end
 
   def update_match_from_match_detail(match) do
-    updated_match=match_struct_from_match_detail(match)
+    updated_match = match_struct_from_match_detail(match)
+
     original_match =
       Match
       |> where([m], m.game_id == ^updated_match[:game_id])
       |> where([m], m.platform_id == ^updated_match[:platform_id])
       |> Repo.one()
-    updated_match(original_match,updated_match)
-  end
 
+    updated_match(original_match, updated_match)
+  end
 
   def match_struct_from_match_detail(match) do
     blue_players =
