@@ -8,6 +8,7 @@ defmodule ZaunLookup.Repo.Migrations.CreateTeams do
       add :match_id, references(:matches, on_delete: :delete_all)
       timestamps()
     end
+
     create index(:teams, [:match_id])
   end
 end

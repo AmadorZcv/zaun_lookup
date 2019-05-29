@@ -17,6 +17,5 @@ defmodule ZaunLookup.Repo.Migrations.CreateMatches do
 
       timestamps()
     end
-
   end
 end

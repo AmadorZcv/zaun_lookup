@@ -6,7 +6,7 @@ defmodule ZaunLookup.Riot.Api do
     HTTPoison.get!(url, headers).body |> Jason.decode!()
   end
 
-  def get_summoner_by_id(region,id) do
+  def get_summoner_by_id(region, id) do
     url = Routes.summoner_by_summoner_id(region, id)
     request(url)
   end
@@ -20,6 +20,7 @@ defmodule ZaunLookup.Riot.Api do
     url = Routes.summoner_by_puuid(region, puuid)
     request(url)
   end
+
   def get_match_by_id(region, match_id) do
     url = Routes.match_by_match_id(region, match_id)
     request(url)
@@ -30,20 +31,22 @@ defmodule ZaunLookup.Riot.Api do
     request(url)
   end
 
-  def get_challenger_by_queue(region,queue) do
+  def get_challenger_by_queue(region, queue) do
     url = Routes.challenger_by_queue(region, queue)
     request(url)
   end
 
-  def get_grandmaster_by_queue(region,queue) do
+  def get_grandmaster_by_queue(region, queue) do
     url = Routes.grandmaster_by_queue(region, queue)
     request(url)
   end
-  def get_master_by_queue(region,queue) do
+
+  def get_master_by_queue(region, queue) do
     url = Routes.master_by_queue(region, queue)
     request(url)
   end
-  def get_league_by_summoner_id(region,summoner_id) do
+
+  def get_league_by_summoner_id(region, summoner_id) do
     url = Routes.entries_by_summoner_id(region, summoner_id)
     request(url)
   end

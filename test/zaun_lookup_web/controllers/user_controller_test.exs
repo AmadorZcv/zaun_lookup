@@ -3,8 +3,20 @@ defmodule ZaunLookupWeb.UserControllerTest do
 
   alias ZaunLookup.Players
 
-  @create_attrs %{account_id: "some account_id", name: "some name", puuid: "some puuid", revision_date: 42, riot_id: "some riot_id"}
-  @update_attrs %{account_id: "some updated account_id", name: "some updated name", puuid: "some updated puuid", revision_date: 43, riot_id: "some updated riot_id"}
+  @create_attrs %{
+    account_id: "some account_id",
+    name: "some name",
+    puuid: "some puuid",
+    revision_date: 42,
+    riot_id: "some riot_id"
+  }
+  @update_attrs %{
+    account_id: "some updated account_id",
+    name: "some updated name",
+    puuid: "some updated puuid",
+    revision_date: 43,
+    riot_id: "some updated riot_id"
+  }
   @invalid_attrs %{account_id: nil, name: nil, puuid: nil, revision_date: nil, riot_id: nil}
 
   def fixture(:user) do
@@ -75,6 +87,7 @@ defmodule ZaunLookupWeb.UserControllerTest do
     test "deletes chosen user", %{conn: conn, user: user} do
       conn = delete(conn, Routes.user_path(conn, :delete, user))
       assert redirected_to(conn) == Routes.user_path(conn, :index)
+
       assert_error_sent 404, fn ->
         get(conn, Routes.user_path(conn, :show, user))
       end

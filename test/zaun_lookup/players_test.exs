@@ -6,8 +6,20 @@ defmodule ZaunLookup.PlayersTest do
   describe "users" do
     alias ZaunLookup.Players.User
 
-    @valid_attrs %{account_id: "some account_id", name: "some name", puuid: "some puuid", revision_date: 42, riot_id: "some riot_id"}
-    @update_attrs %{account_id: "some updated account_id", name: "some updated name", puuid: "some updated puuid", revision_date: 43, riot_id: "some updated riot_id"}
+    @valid_attrs %{
+      account_id: "some account_id",
+      name: "some name",
+      puuid: "some puuid",
+      revision_date: 42,
+      riot_id: "some riot_id"
+    }
+    @update_attrs %{
+      account_id: "some updated account_id",
+      name: "some updated name",
+      puuid: "some updated puuid",
+      revision_date: 43,
+      riot_id: "some updated riot_id"
+    }
     @invalid_attrs %{account_id: nil, name: nil, puuid: nil, revision_date: nil, riot_id: nil}
 
     def user_fixture(attrs \\ %{}) do
@@ -73,9 +85,45 @@ defmodule ZaunLookup.PlayersTest do
   describe "matches" do
     alias ZaunLookup.Players.Match
 
-    @valid_attrs %{game_creation: 42, game_duration: 42, game_id: 42, game_mode: "some game_mode", game_type: "some game_type", game_version: "some game_version", map_id: 42, platform_id: "some platform_id", queue_id: 42, season_id: 42, winning_team: "some winning_team"}
-    @update_attrs %{game_creation: 43, game_duration: 43, game_id: 43, game_mode: "some updated game_mode", game_type: "some updated game_type", game_version: "some updated game_version", map_id: 43, platform_id: "some updated platform_id", queue_id: 43, season_id: 43, winning_team: "some updated winning_team"}
-    @invalid_attrs %{game_creation: nil, game_duration: nil, game_id: nil, game_mode: nil, game_type: nil, game_version: nil, map_id: nil, platform_id: nil, queue_id: nil, season_id: nil, winning_team: nil}
+    @valid_attrs %{
+      game_creation: 42,
+      game_duration: 42,
+      game_id: 42,
+      game_mode: "some game_mode",
+      game_type: "some game_type",
+      game_version: "some game_version",
+      map_id: 42,
+      platform_id: "some platform_id",
+      queue_id: 42,
+      season_id: 42,
+      winning_team: "some winning_team"
+    }
+    @update_attrs %{
+      game_creation: 43,
+      game_duration: 43,
+      game_id: 43,
+      game_mode: "some updated game_mode",
+      game_type: "some updated game_type",
+      game_version: "some updated game_version",
+      map_id: 43,
+      platform_id: "some updated platform_id",
+      queue_id: 43,
+      season_id: 43,
+      winning_team: "some updated winning_team"
+    }
+    @invalid_attrs %{
+      game_creation: nil,
+      game_duration: nil,
+      game_id: nil,
+      game_mode: nil,
+      game_type: nil,
+      game_version: nil,
+      map_id: nil,
+      platform_id: nil,
+      queue_id: nil,
+      season_id: nil,
+      winning_team: nil
+    }
 
     def match_fixture(attrs \\ %{}) do
       {:ok, match} =

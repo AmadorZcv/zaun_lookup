@@ -68,8 +68,6 @@ defmodule ZaunLookup.Players do
 
   """
   def update_user(%User{} = user, attrs) do
-    IO.puts("Hehe")
-
     user
     |> User.changeset(attrs)
     |> Repo.update()
@@ -102,6 +100,17 @@ defmodule ZaunLookup.Players do
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
+  end
+
+  def user_struct_from_match(user) do
+    %{
+      name: user["summonerName"],
+      tier: user["rank"],
+      account_id: user["accountId"],
+      riot_id: user["summonerId"],
+      last_updated: Time.utc_now() |> Time.truncate(:second),
+      region: user["platformId"]
+    }
   end
 
   def user_struct_from_league(user, region) do
@@ -139,6 +148,27 @@ defmodule ZaunLookup.Players do
   def update_user_from_summoner(updated, region, user) do
     updated_user = user_struct_from_summoner(updated, region)
     update_user(user, updated_user)
+  end
+
+  def user_id_from_match(user) do
+    original_user =
+      User
+      |> where([u], u.riot_id == ^user["summonerId"])
+      |> where([u], u.region == ^user["platformId"])
+      |> Repo.one()
+
+    case original_user do
+      nil ->
+        new_user =
+          user_struct_from_match(user)
+          |> create_user()
+
+      new_user = original_user ->
+        updated_user = user_struct_from_match(user)
+        updated_user(original_user, updated_user)
+    end
+
+    new_user[:id]
   end
 
   alias ZaunLookup.Players.Match
@@ -190,6 +220,24 @@ defmodule ZaunLookup.Players do
     |> Repo.insert()
   end
 
+  def create_match_from_match_list(match) do
+    # "timestamp": 1558938649042,
+    # "queue": 420,
+    # "season": 13
+    match_struct_from_match_list(match)
+    |> create_match()
+  end
+
+  def match_struct_from_match_list(match) do
+    %{
+      game_id: match["gameId"],
+      platform_id: match["platformId"],
+      fetched: false,
+      queue_id: match["queue"],
+      season_id: match["season"]
+    }
+  end
+
   @doc """
   Updates a match.
 
@@ -206,6 +254,77 @@ defmodule ZaunLookup.Players do
     match
     |> Match.changeset(attrs)
     |> Repo.update()
+  end
+
+  def update_match_from_match_detail(match) do
+    updated_match=match_struct_from_match_detail(match)
+    original_match =
+      Match
+      |> where([m], m.game_id == ^updated_match[:game_id])
+      |> where([m], m.platform_id == ^updated_match[:platform_id])
+      |> Repo.one()
+    updated_match(original_match,updated_match)
+  end
+
+
+  def match_struct_from_match_detail(match) do
+    blue_players =
+      match["participantIdentities"] |> Enum.take(5) |> Enum.map(&user_id_from_match(&1))
+
+    red_players =
+      match["participantIdentities"] |> Enum.take(-5) |> Enum.map(&user_id_from_match(&1))
+
+    blue_team =
+      match["teams"]
+      |> Enum.at(0)
+      |> Map.put_new("players", blue_players)
+      |> Map.update!("win", &if(&1 == "win", do: true, else: false))
+
+    red_team =
+      match["teams"]
+      |> Enum.at(1)
+      |> Map.put_new("players", red_players)
+      |> Map.update!("win", &if(&1 == "win", do: true, else: false))
+
+    teams = %{blue_team: blue_team, red_team: red_team}
+
+    %{
+      game_id: match["gameId"],
+      platform_id: match["platformId"],
+      queue_id: match["queue"],
+      season_id: match["season"],
+      game_creation: match["gameCreation"],
+      game_duration: match["gameDuration"],
+      game_mode: match["gameMode"],
+      game_type: match["gameMode"],
+      game_version: match["gameVersion"],
+      map_id: match["mapId"],
+      fetched: true,
+      teams: teams
+    }
+  end
+
+  def teams_from_match_detail(teams) do
+    blue_team = teams[:blue_team]
+    red_team = teams[:red_team]
+
+    [
+      %{
+        name: "blue",
+        win: blue_team["win"],
+        players: team_players_from_team(blue_team["players"])
+      },
+      %{
+        name: "red",
+        win: red_team["win"],
+        players: team_players_from_team(red_team["players"])
+      }
+    ]
+  end
+
+  def team_players_from_team(players) do
+    players
+    |> Enum.map(fn player -> %{player_id: player["id"]} end)
   end
 
   @doc """

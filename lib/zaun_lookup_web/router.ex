@@ -19,7 +19,7 @@ defmodule ZaunLookupWeb.Router do
 
     get "/", PageController, :index
     resources("/player", UserController)
-    get "/mathes", MatchController,:index
+    get "/mathes", MatchController, :index
   end
 
   # Other scopes may use custom stacks.

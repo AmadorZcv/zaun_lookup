@@ -25,7 +25,6 @@ defmodule ZaunLookupWeb do
       import ZaunLookupWeb.Gettext
       import Phoenix.LiveView.Controller, only: [live_render: 3]
       alias ZaunLookupWeb.Router.Helpers, as: Routes
-
     end
   end
 

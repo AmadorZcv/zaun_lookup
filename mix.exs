@@ -20,7 +20,7 @@ defmodule ZaunLookup.MixProject do
   def application do
     [
       mod: {ZaunLookup.Application, []},
-      extra_applications: [:logger, :runtime_tools,:timex]
+      extra_applications: [:logger, :runtime_tools, :timex]
     ]
   end
 
@@ -57,7 +57,7 @@ defmodule ZaunLookup.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      "ecto.setup": ["ecto.create", "ecto.migrate",],
+      "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]

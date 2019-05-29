@@ -11,6 +11,7 @@ defmodule ZaunLookup.Repo.Migrations.CreateUsers do
 
       timestamps()
     end
+
     create unique_index(:users, [:puuid])
   end
 end
