@@ -37,6 +37,9 @@ defmodule ZaunLookup.Tracker do
   end
 
   def top_cycle(regions) do
+    IO.puts("Top Cycle")
+    IO.inspect(regions)
+
     Task.async_stream(regions, &top_region(&1), timeout: 600_000, max_concurrency: 12)
     |> Enum.to_list()
   end
@@ -48,6 +51,9 @@ defmodule ZaunLookup.Tracker do
   end
 
   def player_cycle(regions) do
+    IO.puts("Player Cycle")
+    IO.inspect(regions)
+
     Task.async_stream(regions, &player_region(&1),
       timeout: 600_000,
       max_concurrency: 12
@@ -62,8 +68,6 @@ defmodule ZaunLookup.Tracker do
   end
 
   def handle_info(:work, state) do
-    IO.puts("Player Cycle")
-
     top_regions =
       if should_update_top(state) do
         top_cycle(@regions)
