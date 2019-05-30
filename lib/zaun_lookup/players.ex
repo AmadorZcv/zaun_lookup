@@ -21,6 +21,15 @@ defmodule ZaunLookup.Players do
     Repo.all(User)
   end
 
+  def list_users_to_update(region) do
+    User
+    |> order_by([u], fragment("?::time", u.updated_at))
+    |> where([u], u.region == ^region[:region])
+    |> where([u], is_nil(u.account_id))
+    |> limit(^region[:requests])
+    |> Repo.all()
+  end
+
   @doc """
   Gets a single user.
 
@@ -131,7 +140,8 @@ defmodule ZaunLookup.Players do
       last_updated: Time.utc_now() |> Time.truncate(:second),
       region: region,
       account_id: user["accountId"],
-      puuid: user["puuid"]
+      puuid: user["puuid"],
+      begin_index: 0
     }
   end
 

@@ -1,7 +1,13 @@
 defmodule ZaunLookup.Riot do
   alias ZaunLookup.Riot.Api
   alias ZaunLookup.Players
+
   @queue "RANKED_SOLO_5x5"
+
+  def update_players(region) do
+    Players.list_users_to_update(region)
+    |> Enum.map(&set_user(region[:region], &1))
+  end
 
   def update_from_league_into_user(user_api, user, region, tier) when user_api != nil do
     Players.update_user_from_league(
@@ -28,11 +34,6 @@ defmodule ZaunLookup.Riot do
     update_from_league_into_user(user_api, user, region, user_api["tier"])
   end
 
-  def set_tops_of_regions(regions) do
-    Task.async_stream(regions, &set_top_of_region(&1), timeout: 600_000, max_concurrency: 12)
-    |> Enum.to_list()
-  end
-
   def set_top_of_region(region) do
     IO.inspect("Region é #{region[:region]}")
     challengers = Api.get_challenger_by_queue(region[:region], @queue)["entries"]
@@ -41,14 +42,11 @@ defmodule ZaunLookup.Riot do
     Enum.each(grandmasters, &insert_from_league_into_user(&1, region[:region], "Grandmaster"))
     masters = Api.get_master_by_queue(region[:region], @queue)["entries"]
     Enum.each(masters, &insert_from_league_into_user(&1, region[:region], "Master"))
-    Map.update!(region, :requests, &(&1 - 3))
+    3
   end
 
-  def set_match_from_detail(region,match) do
+  def set_match_from_detail(region, match) do
     match_api = Api.get_match_by_id(region, match.game_id)
     Players.update_match_from_match_detail(match_api)
   end
-
-
-
 end
