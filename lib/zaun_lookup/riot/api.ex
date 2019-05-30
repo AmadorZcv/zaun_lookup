@@ -1,8 +1,11 @@
 defmodule ZaunLookup.Riot.Api do
   alias ZaunLookup.Riot.Routes
 
-  def request(url) do
-    headers = ["X-Riot-Token": "RGAPI-1642232d-53b1-42f1-b8b4-df6876794045"]
+  def request(url, headers \\ %{}) do
+    headers =
+      %{"X-Riot-Token": "RGAPI-1642232d-53b1-42f1-b8b4-df6876794045"}
+      |> Map.merge(headers)
+
     HTTPoison.get!(url, headers).body |> Jason.decode!()
   end
 
@@ -26,8 +29,8 @@ defmodule ZaunLookup.Riot.Api do
     request(url)
   end
 
-  def get_matches_by_account_id(region, account_id) do
-    url = Routes.matches_by_account_id(region, account_id)
+  def get_matches_by_account_id(region, account_id, begin_index \\ 0, queue \\ 420) do
+    url = Routes.matches_by_account_id(region, account_id, begin_index, queue)
     request(url)
   end
 

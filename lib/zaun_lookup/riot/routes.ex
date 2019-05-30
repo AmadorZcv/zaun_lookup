@@ -24,9 +24,9 @@ defmodule ZaunLookup.Riot.Routes do
   @matches_by_account_id "#{@match}matchlists/by-account/"
   @match_by_match_id "#{@match}matches/"
 
-  def matches_by_account_id(region, account_id) do
+  def matches_by_account_id(region, account_id, begin_index \\ 0, queue \\ 420) do
     endpoint = Endpoints.get_endpoint(region)
-    "#{endpoint}#{@matches_by_account_id}#{account_id}"
+    "#{endpoint}#{@matches_by_account_id}#{account_id}?queue=#{queue}&beginIndex=#{begin_index}"
   end
 
   def match_by_match_id(region, match_id) do

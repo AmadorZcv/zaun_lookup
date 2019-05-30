@@ -12,6 +12,8 @@ defmodule ZaunLookup.Players.User do
     field :region, :string
     field :tier, :string
     field :points, :integer
+    field :total_games, :integer
+    field :begin_index, :integer
     timestamps()
   end
 
@@ -26,7 +28,9 @@ defmodule ZaunLookup.Players.User do
       :revision_date,
       :last_updated,
       :region,
-      :points
+      :points,
+      :total_games,
+      :begin_index
     ])
     |> unique_constraint(:puuid)
     |> unique_constraint(:unique_on_region, name: :unique_on_region)
