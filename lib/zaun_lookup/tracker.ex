@@ -4,6 +4,25 @@ defmodule ZaunLookup.Tracker do
   alias ZaunLookup.Riot
   alias ZaunLookup.Riot.Endpoints
   @regions Enum.map(Endpoints.regions(), &%{region: &1, requests: 100})
+
+  def manage_top(regions, state) do
+    if(Enum.any?(regions, &(&1[:requests] < 100)), do: Timex.now(), else: state)
+  end
+
+  def should_update_top(state) do
+    case Timex.is_valid?(state) do
+      true ->
+        if Timex.diff(state, Timex.now(), :hours) >= 24 do
+          true
+        else
+          false
+        end
+
+      _ ->
+        true
+    end
+  end
+
   def start_link(opts) do
     GenServer.start_link(__MODULE__, %{}, opts)
   end
@@ -45,8 +64,16 @@ defmodule ZaunLookup.Tracker do
   def handle_info(:work, state) do
     IO.puts("Player Cycle")
 
-    @regions
-    |> top_cycle()
+    top_regions =
+      if should_update_top(state) do
+        top_cycle(@regions)
+      else
+        @regions
+      end
+
+    state = manage_top(top_regions, state)
+
+    top_regions
     |> player_cycle()
 
     # Do the work you desire here
