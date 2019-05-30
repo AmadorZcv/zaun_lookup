@@ -159,16 +159,13 @@ defmodule ZaunLookup.Players do
 
     case original_user do
       nil ->
-        new_user =
-          user_struct_from_match(user)
-          |> create_user()
+        user_struct_from_match(user)
+        |> create_user()
 
-      new_user = original_user ->
+      original_user ->
         updated_user = user_struct_from_match(user)
-        updated_user(original_user, updated_user)
+        update_user(original_user, updated_user)
     end
-
-    new_user[:id]
   end
 
   alias ZaunLookup.Players.Match
@@ -265,7 +262,7 @@ defmodule ZaunLookup.Players do
       |> where([m], m.platform_id == ^updated_match[:platform_id])
       |> Repo.one()
 
-    updated_match(original_match, updated_match)
+    update_match(original_match, updated_match)
   end
 
   def match_struct_from_match_detail(match) do
