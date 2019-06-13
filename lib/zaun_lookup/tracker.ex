@@ -61,6 +61,36 @@ defmodule ZaunLookup.Tracker do
     |> Enum.to_list()
   end
 
+  def match_region(region) do
+    region
+  end
+
+  def match_cycle(regions) do
+    IO.puts("Match Cycle")
+    IO.inspect(regions)
+
+    Task.async_stream(regions, &match_region(&1),
+      timeout: 600_000,
+      max_concurrency: 12
+    )
+    |> Enum.to_list()
+  end
+
+  def match_list_region(region) do
+    region
+  end
+
+  def match_list_cycle(regions) do
+    IO.puts("Match List Cycle")
+    IO.inspect(regions)
+
+    Task.async_stream(regions, &match_list_region(&1),
+      timeout: 600_000,
+      max_concurrency: 12
+    )
+    |> Enum.to_list()
+  end
+
   def init(state) do
     # Schedule work to be performed at some point
     schedule_work()
@@ -79,6 +109,8 @@ defmodule ZaunLookup.Tracker do
 
     top_regions
     |> player_cycle()
+    |> match_cycle()
+    |> match_list_cycle()
 
     # Do the work you desire here
     # Reschedule once more
