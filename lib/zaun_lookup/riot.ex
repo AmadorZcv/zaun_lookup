@@ -1,6 +1,6 @@
 defmodule ZaunLookup.Riot do
   alias ZaunLookup.Riot.Api
-  alias ZaunLookup.Players
+  alias ZaunLookup.{Players, Matches}
 
   @queue "RANKED_SOLO_5x5"
 
@@ -9,7 +9,7 @@ defmodule ZaunLookup.Riot do
     |> Enum.map(&set_user(region.region, &1))
   end
 
-  def update_from_league_into_user(user_api, user, region, tier) when user_api != nil do
+  def update_from_league_into_user(user_api, user, region, tier) do
     Players.update_user_from_league(
       Map.update!(user_api, "rank", &"#{tier} #{&1})}"),
       region,
@@ -17,7 +17,7 @@ defmodule ZaunLookup.Riot do
     )
   end
 
-  def insert_from_league_into_user(user, region, tier) when user != nil do
+  def insert_from_league_into_user(user, region, tier) do
     Players.create_user_from_league(Map.update!(user, "rank", &"#{tier} #{&1})}"), region)
   end
 
@@ -43,10 +43,5 @@ defmodule ZaunLookup.Riot do
     masters = Api.get_master_by_queue(region.region, @queue)["entries"]
     Enum.each(masters, &insert_from_league_into_user(&1, region.region, "Master"))
     3
-  end
-
-  def set_match_from_detail(region, match) do
-    match_api = Api.get_match_by_id(region, match.game_id)
-    Players.update_match_from_match_detail(match_api)
   end
 end
