@@ -3,20 +3,46 @@ defmodule ZaunLookup.Riot.Api do
 
   def request(url, headers \\ %{}) do
     headers =
-      %{"X-Riot-Token": "RGAPI-964aeb84-1c09-4924-a3fc-0b5c7fe418aa"}
+      %{"X-Riot-Token": "RGAPI-98510066-6f77-4d54-8613-a84fd1aead57"}
       |> Map.merge(headers)
 
-    HTTPoison.get!(url, headers).body |> Jason.decode!()
+    case HTTPoison.get(url, headers) do
+      {:ok, response} ->
+        {:ok, Jason.decode!(response.body)}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  def handle_queue(url) do
+    case request(url) do
+      {:ok, response} ->
+        response
+
+      {:error, _} ->
+        %{"entries" => []}
+    end
+  end
+
+  def handle_summoner(url) do
+    case request(url) do
+      {:ok, response} ->
+        response
+
+      {:error, _} ->
+        %{}
+    end
   end
 
   def get_summoner_by_id(region, id) do
     url = Routes.summoner_by_summoner_id(region, id)
-    request(url)
+    handle_summoner(url)
   end
 
   def get_summoner_by_name(region, name) do
     url = Routes.summoner_by_summoner_name(region, name)
-    request(url)
+    handle_summoner(url)
   end
 
   def get_summoner_by_puuid(region, puuid) do
@@ -36,17 +62,17 @@ defmodule ZaunLookup.Riot.Api do
 
   def get_challenger_by_queue(region, queue) do
     url = Routes.challenger_by_queue(region, queue)
-    request(url)
+    handle_queue(url)
   end
 
   def get_grandmaster_by_queue(region, queue) do
     url = Routes.grandmaster_by_queue(region, queue)
-    request(url)
+    handle_queue(url)
   end
 
   def get_master_by_queue(region, queue) do
     url = Routes.master_by_queue(region, queue)
-    request(url)
+    handle_queue(url)
   end
 
   def get_league_by_summoner_id(region, summoner_id) do

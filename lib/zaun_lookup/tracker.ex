@@ -102,9 +102,6 @@ defmodule ZaunLookup.Tracker do
         @regions
       end
 
-    # IO.puts("TOPS rtegios")
-    # IO.inspect(top_regions)
-
     state = manage_top(top_regions, state)
 
     top_regions
