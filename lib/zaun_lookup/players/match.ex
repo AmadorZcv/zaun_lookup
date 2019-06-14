@@ -40,7 +40,8 @@ defmodule ZaunLookup.Players.Match do
       :region
     ])
     |> validate_required([
-      :game_id
+      :game_id,
+      :region
     ])
     |> unique_constraint(:unique_on_region, name: :unique_match_on_region)
   end

@@ -69,7 +69,8 @@ defmodule ZaunLookup.Matches do
       platform_id: match["platformId"],
       fetched: false,
       queue_id: match["queue"],
-      season_id: match["season"]
+      season_id: match["season"],
+      region: match["region"]
     }
   end
 
