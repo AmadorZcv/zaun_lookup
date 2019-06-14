@@ -1,4 +1,4 @@
-<h1>Listing Matches</h1>
+<h1>Listing <%= @count %> Matches</h1>
 
 <table>
   <thead>

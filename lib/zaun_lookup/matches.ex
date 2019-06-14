@@ -17,6 +17,16 @@ defmodule ZaunLookup.Matches do
     Repo.all(Match)
   end
 
+  def list_matches(limit) do
+    Match
+    |> limit(^limit)
+    |> Repo.all()
+  end
+
+  def count_matches() do
+    Repo.aggregate(Match, :count, :id)
+  end
+
   def list_matches_to_update(region) do
     Match
     |> order_by([m], fragment("?::time", m.updated_at))
