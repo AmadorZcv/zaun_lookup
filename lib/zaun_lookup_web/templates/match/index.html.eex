@@ -3,6 +3,7 @@
 <table>
   <thead>
     <tr>
+    <th>ID</th>
       <th>Season</th>
       <th>Queue</th>
       <th>Region</th>
@@ -11,6 +12,7 @@
   <tbody>
 <%= for match <- @matches do %>
     <tr>
+    <td><%= match.game_id %></td>
       <td><%= match.season_id %></td>
       <td><%= match.queue_id %></td>
 <td><%= match.region %></td>
