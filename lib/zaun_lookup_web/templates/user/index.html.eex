@@ -4,10 +4,7 @@
   <thead>
     <tr>
       <th>Name</th>
-      <th>Puuid</th>
-      <th>Account</th>
-      <th>Riot</th>
-      <th>Revision date</th>
+      <th>Region</th>
 
       <th></th>
     </tr>
@@ -16,10 +13,7 @@
 <%= for user <- @users do %>
     <tr>
       <td><%= user.name %></td>
-      <td><%= user.puuid %></td>
-      <td><%= user.account_id %></td>
-      <td><%= user.riot_id %></td>
-      <td><%= user.revision_date %></td>
+      <td><%= user.region %></td>
 
       <td>
         <%= link "Show", to: Routes.user_path(@conn, :show, user) %>

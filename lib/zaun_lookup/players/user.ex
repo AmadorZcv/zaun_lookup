@@ -32,6 +32,7 @@ defmodule ZaunLookup.Players.User do
       :total_games,
       :begin_index
     ])
+    |> validate_required([:name, :region])
     |> unique_constraint(:puuid)
     |> unique_constraint(:unique_on_region, name: :unique_on_region)
   end

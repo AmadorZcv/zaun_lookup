@@ -5,7 +5,7 @@ defmodule ZaunLookup.Players do
 
   import Ecto.Query, warn: false
   alias ZaunLookup.Repo
-
+  alias ZaunLookup.Riot.Structs.{UserFromLeague, UserFromMatch}
   alias ZaunLookup.Players.User
 
   @doc """
@@ -111,28 +111,6 @@ defmodule ZaunLookup.Players do
     User.changeset(user, %{})
   end
 
-  def user_struct_from_match(user) do
-    %{
-      name: user["summonerName"],
-      tier: user["rank"],
-      account_id: user["accountId"],
-      riot_id: user["summonerId"],
-      last_updated: Time.utc_now() |> Time.truncate(:second),
-      region: user["platformId"]
-    }
-  end
-
-  def user_struct_from_league(user, region) do
-    %{
-      name: user["summonerName"],
-      tier: user["rank"],
-      points: user["leaguePoints"],
-      riot_id: user["summonerId"],
-      last_updated: Time.utc_now() |> Time.truncate(:second),
-      region: region
-    }
-  end
-
   def user_struct_from_summoner(user, region) do
     %{
       name: user["name"],
@@ -146,12 +124,12 @@ defmodule ZaunLookup.Players do
   end
 
   def create_user_from_league(user, region) do
-    user_struct_from_league(user, region)
+    UserFromLeague.from_api(user, region)
     |> create_user()
   end
 
   def update_user_from_league(updated, region, user) do
-    updated_user = user_struct_from_league(updated, region)
+    updated_user = UserFromLeague.from_api(updated, region)
     update_user(user, updated_user)
   end
 
@@ -169,11 +147,11 @@ defmodule ZaunLookup.Players do
 
     case original_user do
       nil ->
-        user_struct_from_match(user)
+        UserFromMatch.from_api(user)
         |> create_user()
 
       original_user ->
-        updated_user = user_struct_from_match(user)
+        updated_user = UserFromMatch.from_api(user)
         update_user(original_user, updated_user)
     end
   end
