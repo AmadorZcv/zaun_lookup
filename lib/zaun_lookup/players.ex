@@ -24,9 +24,9 @@ defmodule ZaunLookup.Players do
   def list_users_to_update(region) do
     User
     |> order_by([u], fragment("?::time", u.updated_at))
-    |> where([u], u.region == ^region[:region])
+    |> where([u], u.region == ^region.region)
     |> where([u], is_nil(u.account_id))
-    |> limit(^region[:requests])
+    |> limit(^region.requests)
     |> Repo.all()
   end
 

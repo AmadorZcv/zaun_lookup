@@ -6,7 +6,7 @@ defmodule ZaunLookup.Riot do
 
   def update_players(region) do
     Players.list_users_to_update(region)
-    |> Enum.map(&set_user(region[:region], &1))
+    |> Enum.map(&set_user(region.region, &1))
   end
 
   def update_from_league_into_user(user_api, user, region, tier) when user_api != nil do
@@ -35,13 +35,13 @@ defmodule ZaunLookup.Riot do
   end
 
   def set_top_of_region(region) do
-    IO.inspect("Region é #{region[:region]}")
-    challengers = Api.get_challenger_by_queue(region[:region], @queue)["entries"]
-    Enum.each(challengers, &insert_from_league_into_user(&1, region[:region], "Challenger"))
-    grandmasters = Api.get_grandmaster_by_queue(region[:region], @queue)["entries"]
-    Enum.each(grandmasters, &insert_from_league_into_user(&1, region[:region], "Grandmaster"))
-    masters = Api.get_master_by_queue(region[:region], @queue)["entries"]
-    Enum.each(masters, &insert_from_league_into_user(&1, region[:region], "Master"))
+    # IO.inspect("Region é #{region.region}")
+    challengers = Api.get_challenger_by_queue(region.region, @queue)["entries"]
+    Enum.each(challengers, &insert_from_league_into_user(&1, region.region, "Challenger"))
+    grandmasters = Api.get_grandmaster_by_queue(region.region, @queue)["entries"]
+    Enum.each(grandmasters, &insert_from_league_into_user(&1, region.region, "Grandmaster"))
+    masters = Api.get_master_by_queue(region.region, @queue)["entries"]
+    Enum.each(masters, &insert_from_league_into_user(&1, region.region, "Master"))
     3
   end
 
