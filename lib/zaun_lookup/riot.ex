@@ -60,7 +60,7 @@ defmodule ZaunLookup.Riot do
     players_matches
     |> Enum.map(fn {_, match} -> match["matches"] end)
     |> Enum.concat()
-    |> Enum.map(fn match -> Map.put_new(match, "region", region) end)
+    |> Enum.map(fn match -> Map.put_new(match, "region", region.region) end)
     |> Matches.create_matches_from_match_list()
 
     players_matches

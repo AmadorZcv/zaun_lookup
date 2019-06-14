@@ -1,21 +1,21 @@
 defmodule ZaunLookupWeb.MatchController do
   use ZaunLookupWeb, :controller
 
-  alias ZaunLookup.Players
+  alias ZaunLookup.Matches
   alias ZaunLookup.Players.Match
 
   def index(conn, _params) do
-    matches = Players.list_matches()
+    matches = Matches.list_matches()
     render(conn, "index.html", matches: matches)
   end
 
   def new(conn, _params) do
-    changeset = Players.change_match(%Match{})
+    changeset = Matches.change_match(%Match{})
     render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"match" => match_params}) do
-    case Players.create_match(match_params) do
+    case Matches.create_match(match_params) do
       {:ok, match} ->
         conn
         |> put_flash(:info, "Match created successfully.")
@@ -27,20 +27,20 @@ defmodule ZaunLookupWeb.MatchController do
   end
 
   def show(conn, %{"id" => id}) do
-    match = Players.get_match!(id)
+    match = Matches.get_match!(id)
     render(conn, "show.html", match: match)
   end
 
   def edit(conn, %{"id" => id}) do
-    match = Players.get_match!(id)
-    changeset = Players.change_match(match)
+    match = Matches.get_match!(id)
+    changeset = Matches.change_match(match)
     render(conn, "edit.html", match: match, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "match" => match_params}) do
-    match = Players.get_match!(id)
+    match = Matches.get_match!(id)
 
-    case Players.update_match(match, match_params) do
+    case Matches.update_match(match, match_params) do
       {:ok, match} ->
         conn
         |> put_flash(:info, "Match updated successfully.")
@@ -52,8 +52,8 @@ defmodule ZaunLookupWeb.MatchController do
   end
 
   def delete(conn, %{"id" => id}) do
-    match = Players.get_match!(id)
-    {:ok, _match} = Players.delete_match(match)
+    match = Matches.get_match!(id)
+    {:ok, _match} = Matches.delete_match(match)
 
     conn
     |> put_flash(:info, "Match deleted successfully.")
