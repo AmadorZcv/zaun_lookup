@@ -63,9 +63,7 @@ defmodule ZaunLookup.Tracker do
   end
 
   def match_region(region) do
-    Riot.update_matches_list(region)
-    |> Enum.count()
-    |> subtract_requests(region)
+    region
   end
 
   def match_cycle(regions) do
@@ -114,6 +112,6 @@ defmodule ZaunLookup.Tracker do
 
   defp schedule_work() do
     # In 2 minutes and change
-    Process.send_after(self(), :work, 3_001)
+    Process.send_after(self(), :work, 120_001)
   end
 end

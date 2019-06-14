@@ -15,6 +15,7 @@ defmodule ZaunLookup.Players.Match do
     field :season_id, :integer
     field :winning_team, :string
     field :fetched, :boolean
+    field :region, :string
     has_many :teams, ZaunLookup.Players.Team
 
     timestamps()
@@ -35,10 +36,12 @@ defmodule ZaunLookup.Players.Match do
       :game_duration,
       :game_creation,
       :winning_team,
-      :fetched
+      :fetched,
+      :region
     ])
     |> validate_required([
       :game_id
     ])
+    |> unique_constraint(:unique_on_region, name: :unique_match_on_region)
   end
 end

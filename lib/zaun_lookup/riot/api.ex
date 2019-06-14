@@ -1,6 +1,5 @@
 defmodule ZaunLookup.Riot.Api do
   alias ZaunLookup.Riot.Routes
-  alias ZaunLookup.Riot.Structs.Region
 
   def request(url, headers \\ %{}) do
     headers =

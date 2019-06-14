@@ -5,8 +5,6 @@ defmodule ZaunLookup.Riot do
   @queue "RANKED_SOLO_5x5"
 
   def update_players(region) do
-    IO.puts("Update? #{region.region}")
-
     Players.list_users_to_update(region)
     |> Enum.map(&set_user(region.region, &1))
   end
