@@ -17,6 +17,15 @@ defmodule ZaunLookup.Matches do
     Repo.all(Match)
   end
 
+  def list_matches_to_update(region) do
+    Match
+    |> order_by([m], fragment("?::time", m.updated_at))
+    |> where([m], m.region == ^region.region)
+    |> where([m], not m.fetched)
+    |> limit(^region.requests)
+    |> Repo.all()
+  end
+
   @doc """
   Gets a single match.
 
