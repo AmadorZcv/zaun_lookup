@@ -18,7 +18,10 @@ defmodule ZaunLookup.Players do
 
   """
   def list_users do
-    Repo.all(User)
+    User
+    |> order_by(asc: :region)
+    |> order_by(desc: :points)
+    |> Repo.all()
   end
 
   def list_users_to_update(region) do
@@ -26,6 +29,15 @@ defmodule ZaunLookup.Players do
     |> order_by([u], fragment("?::time", u.updated_at))
     |> where([u], u.region == ^region.region)
     |> where([u], is_nil(u.account_id))
+    |> limit(^region.requests)
+    |> Repo.all()
+  end
+
+  def list_users_matches_to_update(region) do
+    User
+    |> order_by([u], fragment("?::time", u.updated_at))
+    |> where([u], u.region == ^region.region)
+    |> where([u], not is_nil(u.account_id))
     |> limit(^region.requests)
     |> Repo.all()
   end
@@ -109,6 +121,16 @@ defmodule ZaunLookup.Players do
   """
   def change_user(%User{} = user) do
     User.changeset(user, %{})
+  end
+
+  def update_from_match_list(player, match_count) do
+    if match_count == 0 do
+      player
+      |> update_user(%{begin_index: 0})
+    else
+      player
+      |> update_user(%{begin_index: player.begin_index + 100})
+    end
   end
 
   def user_struct_from_summoner(user, region) do

@@ -51,6 +51,10 @@ defmodule ZaunLookup.Matches do
     |> Repo.insert()
   end
 
+  def create_matches_from_match_list(matches) do
+    Enum.each(matches, &create_match_from_match_list(&1))
+  end
+
   def create_match_from_match_list(match) do
     # "timestamp": 1558938649042,
     # "queue": 420,

@@ -5,7 +5,7 @@
     <tr>
       <th>Name</th>
       <th>Region</th>
-
+<th>Points</th>
       <th></th>
     </tr>
   </thead>
@@ -14,7 +14,7 @@
     <tr>
       <td><%= user.name %></td>
       <td><%= user.region %></td>
-
+<td><%= user.points %></td>
       <td>
         <%= link "Show", to: Routes.user_path(@conn, :show, user) %>
         <%= link "Edit", to: Routes.user_path(@conn, :edit, user) %>

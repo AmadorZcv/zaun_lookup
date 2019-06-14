@@ -25,7 +25,7 @@ defmodule ZaunLookup.Tracker do
           false
         end
 
-      _ ->
+      false ->
         true
     end
   end
@@ -44,14 +44,10 @@ defmodule ZaunLookup.Tracker do
   end
 
   def top_cycle(regions) do
-    # IO.puts("Top Cycle")
-    # IO.inspect(regions)
+    IO.puts("Top Cycle")
+    IO.inspect(regions)
 
-    saida = send_requests(regions, &top_region/1)
-
-    IO.puts("Saida é")
-    IO.inspect(saida)
-    saida
+    send_requests(regions, &top_region/1)
   end
 
   def player_region(region) do
@@ -67,7 +63,9 @@ defmodule ZaunLookup.Tracker do
   end
 
   def match_region(region) do
-    region
+    Riot.update_matches_list(region)
+    |> Enum.count()
+    |> subtract_requests(region)
   end
 
   def match_cycle(regions) do
@@ -77,7 +75,8 @@ defmodule ZaunLookup.Tracker do
   end
 
   def match_list_region(region) do
-    region
+    Riot.update_matches_list(region)
+    |> subtract_requests(region)
   end
 
   def match_list_cycle(regions) do
@@ -102,8 +101,6 @@ defmodule ZaunLookup.Tracker do
         @regions
       end
 
-    state = manage_top(top_regions, state)
-
     top_regions
     |> player_cycle()
     |> match_cycle()
@@ -112,11 +109,11 @@ defmodule ZaunLookup.Tracker do
     # Do the work you desire here
     # Reschedule once more
     schedule_work()
-    {:noreply, state}
+    {:noreply, manage_top(top_regions, state)}
   end
 
   defp schedule_work() do
     # In 2 minutes and change
-    Process.send_after(self(), :work, 120_001)
+    Process.send_after(self(), :work, 3_001)
   end
 end
