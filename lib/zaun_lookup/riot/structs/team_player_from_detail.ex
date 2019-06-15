@@ -25,7 +25,7 @@ defmodule ZaunLookup.Riot.Structs.TeamPlayerFromDetail do
       spell_2: spell_2,
       lane: lane,
       role: role,
-      player_id: player_id,
+      player_id: player_id["player_id"],
       champion_id: champion_id
     }
     |> Map.from_struct()

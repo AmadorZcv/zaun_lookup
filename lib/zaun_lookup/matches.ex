@@ -108,24 +108,23 @@ defmodule ZaunLookup.Matches do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_match(%Match{} = match, attrs) do
+  def update_match(%Match{} = match, attrs, teams \\ []) do
     match
-    |> Match.changeset(attrs)
+    |> Match.changeset(attrs, teams)
     |> Repo.update()
   end
 
   def update_match_from_match_detail(match) do
-    IO.inspect(Map.keys(match))
     updated_match = MatchFromDetail.from_api(match)
 
     original_match =
       Match
       |> where([m], m.game_id == ^updated_match[:game_id])
       |> where([m], m.platform_id == ^updated_match[:platform_id])
+      |> preload([:teams])
       |> Repo.one()
-      |> Repo.preload([:teams])
 
-    update_match(original_match, updated_match)
+    update_match(original_match, updated_match, updated_match.teams)
   end
 
   def match_struct_from_match_detail(match) do

@@ -19,7 +19,7 @@
       <td><%= match.queue_id %></td>
 <td><%= match.region %></td>
 <td><%= match.fetched %></td>
-    <td><%= Enum.find(match.teams,fn team -> team.win end).name %></td>
+   
     </tr>
 <% end %>
   </tbody>

@@ -2,7 +2,6 @@ defmodule ZaunLookup.Riot.Structs.TeamFromDetail do
   alias ZaunLookup.Riot.Structs.{TeamFromDetail, TeamPlayerFromDetail}
 
   defstruct([
-    :players,
     :name,
     :win,
     :first_dragon,

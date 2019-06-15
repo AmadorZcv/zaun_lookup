@@ -93,7 +93,7 @@ defmodule ZaunLookup.Tracker do
   def handle_info(:work, state) do
     top_regions =
       if should_update_top(state) do
-        # IO.puts("First if")
+        IO.puts("First if")
         top_cycle(@regions)
       else
         IO.puts("Second if")

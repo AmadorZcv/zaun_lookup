@@ -22,7 +22,7 @@ defmodule ZaunLookup.Players.Match do
   end
 
   @doc false
-  def changeset(match, attrs) do
+  def changeset(match, attrs, teams \\ []) do
     match
     |> cast(attrs, [
       :season_id,
@@ -43,7 +43,7 @@ defmodule ZaunLookup.Players.Match do
       :game_id,
       :region
     ])
-    |> cast_assoc(:teams)
+    |> put_assoc(:teams, teams)
     |> unique_constraint(:unique_on_region, name: :unique_match_on_region)
   end
 end
