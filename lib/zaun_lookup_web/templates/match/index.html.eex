@@ -7,6 +7,7 @@
       <th>Season</th>
       <th>Queue</th>
       <th>Region</th>
+      <th>Fetched</th>
     </tr>
   </thead>
   <tbody>
@@ -16,7 +17,7 @@
       <td><%= match.season_id %></td>
       <td><%= match.queue_id %></td>
 <td><%= match.region %></td>
-
+<td><%= match.fetched %></td>
     
     </tr>
 <% end %>

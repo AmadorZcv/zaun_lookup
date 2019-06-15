@@ -5,7 +5,7 @@ defmodule ZaunLookup.Players do
 
   import Ecto.Query, warn: false
   alias ZaunLookup.Repo
-  alias ZaunLookup.Riot.Structs.{UserFromLeague, UserFromMatch}
+  alias ZaunLookup.Riot.Structs.{UserFromLeague, UserFromMatch, UserFromMatchDetail}
   alias ZaunLookup.Players.User
 
   @doc """
@@ -160,8 +160,8 @@ defmodule ZaunLookup.Players do
     update_user(user, updated_user)
   end
 
-  def insert_user_from_match(user) do
-    UserFromMatch.from_api(user)
+  def insert_user_from_match(user, region) do
+    UserFromMatchDetail.from_api(user, region)
     |> create_user()
   end
 
@@ -172,8 +172,8 @@ defmodule ZaunLookup.Players do
     |> Repo.one()
   end
 
-  def update_user_from_match(user, user_api) do
-    updated_user = UserFromMatch.from_api(user_api)
+  def update_user_from_match(user, user_api, region) do
+    updated_user = UserFromMatchDetail.from_api(user_api, region)
     update_user(user, updated_user)
   end
 

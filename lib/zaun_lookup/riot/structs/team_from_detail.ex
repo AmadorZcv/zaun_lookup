@@ -19,9 +19,27 @@ defmodule ZaunLookup.Riot.Structs.TeamFromDetail do
     :team_players
   ])
 
-  def teams_from_api(_participants, _identities, _teams) do
-    %TeamFromDetail{}
-    |> Map.from_struct()
+  def join_participants_and_identities(participants, identities) do
+    Enum.map(participants, fn participant ->
+      player_id = Enum.find(identities, &(participant["participantId"] == &1["participantId"]))
+      Map.put_new(participant, "player_id", player_id)
+    end)
+  end
+
+  def teams_from_api(participants, identities, teams) do
+    joined_participants = join_participants_and_identities(participants, identities)
+    blue_participants = Enum.filter(joined_participants, &(&1["teamId"] == 100))
+    red_participants = Enum.filter(joined_participants, &(&1["teamId"] == 200))
+
+    blue_team =
+      Enum.at(teams, 0)
+      |> team_from_api(blue_participants)
+
+    red_team =
+      Enum.at(teams, 1)
+      |> team_from_api(red_participants)
+
+    [blue_team, red_team]
   end
 
   def team_from_api(
@@ -57,8 +75,18 @@ defmodule ZaunLookup.Riot.Structs.TeamFromDetail do
       inhibitor_kills: inhibitor_kills,
       rift_herald_kills: rift_herald_kills,
       dragon_kills: dragon_kills,
-      team_players: team_players
+      team_players: team_players,
+      win: win(win_string)
     }
+    |> Map.from_struct()
+  end
+
+  def win(string) do
+    if string == "Win" do
+      true
+    else
+      false
+    end
   end
 
   def winning_team(teams) do

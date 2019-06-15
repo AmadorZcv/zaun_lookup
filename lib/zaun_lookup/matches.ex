@@ -3,6 +3,7 @@ defmodule ZaunLookup.Matches do
   alias ZaunLookup.Repo
   alias ZaunLookup.Players.Match
   alias ZaunLookup.Players
+  alias ZaunLookup.Riot.Structs.MatchFromDetail
 
   @doc """
   Returns the list of matches.
@@ -112,7 +113,7 @@ defmodule ZaunLookup.Matches do
   end
 
   def update_match_from_match_detail(match) do
-    updated_match = match_struct_from_match_detail(match)
+    updated_match = MatchFromDetail.from_api(match)
 
     original_match =
       Match
