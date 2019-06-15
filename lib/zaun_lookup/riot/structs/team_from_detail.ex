@@ -90,15 +90,15 @@ defmodule ZaunLookup.Riot.Structs.TeamFromDetail do
   end
 
   def winning_team(teams) do
-    if teams[0]["win"] == "Win" do
+    if Enum.at(teams, 0)["win"] == "Win" do
       "blue"
     else
       "red"
     end
   end
 
-  def team_name(team) do
-    if team["teamId"] == 100 do
+  def team_name(team_id) do
+    if team_id == 100 do
       "blue"
     else
       "red"

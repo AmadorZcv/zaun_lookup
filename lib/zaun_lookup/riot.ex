@@ -75,16 +75,17 @@ defmodule ZaunLookup.Riot do
   def get_player_id(player_api, region) do
     case Players.get_user_from_match(player_api["summonerId"], region) do
       nil ->
-        IO.puts("AQui")
-        Players.insert_user_from_match(player_api, region).id
+        with({:ok, player} <- Players.insert_user_from_match(player_api, region)) do
+          player.id
+        end
 
       player ->
-        IO.puts("AQUI???")
+        case Players.update_user_from_match(player, player_api, region) do
+          {:ok, updated_player} ->
+            updated_player.id
 
-        with(
-          {:ok, updated_player} <- Players.update_user_from_match(player, player_api, region)
-        ) do
-          updated_player.id
+          _ ->
+            player.id
         end
     end
   end
@@ -95,7 +96,6 @@ defmodule ZaunLookup.Riot do
         Map.put_new(participant, "player_id", get_player_id(participant["player"], region.region))
       end)
 
-    IO.puts("Match?")
     # Atualizar identities com o player_id
     Matches.update_match_from_match_detail(
       Map.put(match, "participantIdentities", participantIdentities)

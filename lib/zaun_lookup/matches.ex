@@ -113,6 +113,7 @@ defmodule ZaunLookup.Matches do
   end
 
   def update_match_from_match_detail(match) do
+    IO.inspect(Map.keys(match))
     updated_match = MatchFromDetail.from_api(match)
 
     original_match =

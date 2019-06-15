@@ -20,8 +20,8 @@ defmodule ZaunLookup.Riot.Structs.MatchFromDetail do
   def from_api(%{
         "gameId" => game_id,
         "platformId" => platform_id,
-        "queue" => queue_id,
-        "season" => season_id,
+        "queueId" => queue_id,
+        "seasonId" => season_id,
         "gameCreation" => game_creation,
         "gameDuration" => game_duration,
         "gameMode" => game_mode,

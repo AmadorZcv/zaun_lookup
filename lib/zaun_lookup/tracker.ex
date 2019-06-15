@@ -113,6 +113,6 @@ defmodule ZaunLookup.Tracker do
 
   defp schedule_work() do
     # In 2 minutes and change
-    Process.send_after(self(), :work, 3_000)
+    Process.send_after(self(), :work, 120_001)
   end
 end
