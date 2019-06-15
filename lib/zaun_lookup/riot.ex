@@ -71,8 +71,14 @@ defmodule ZaunLookup.Riot do
     Enum.count(players_matches)
   end
 
+  def set_match(match) do
+    Matches.update_match_from_match_detail(match)
+  end
+
   def update_matches(region) do
     Matches.list_matches_to_update(region)
     |> Enum.map(fn match -> Api.get_match_by_id(region.region, match.game_id) end)
+    |> Enum.map(&set_match(&1))
+    |> Enum.count()
   end
 end

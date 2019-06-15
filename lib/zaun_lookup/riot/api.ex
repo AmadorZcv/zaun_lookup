@@ -45,6 +45,16 @@ defmodule ZaunLookup.Riot.Api do
     end
   end
 
+  def handle_match(url) do
+    case request(url) do
+      {:ok, response} ->
+        response
+
+      {:error, _} ->
+        %{}
+    end
+  end
+
   def get_summoner_by_id(region, id) do
     url = Routes.summoner_by_summoner_id(region, id)
     handle_summoner(url)
@@ -62,7 +72,7 @@ defmodule ZaunLookup.Riot.Api do
 
   def get_match_by_id(region, match_id) do
     url = Routes.match_by_match_id(region, match_id)
-    request(url)
+    handle_match(url)
   end
 
   def get_matches_by_account_id(region, account_id, begin_index \\ 0, queue \\ 420) do

@@ -124,8 +124,24 @@ defmodule ZaunLookup.Matches do
   end
 
   def match_struct_from_match_detail(match) do
+    participants = match["participants"]
+
     blue_players =
-      match["participantIdentities"] |> Enum.take(5) |> Enum.map(&Players.user_id_from_match(&1))
+      match["participantIdentities"]
+      |> Enum.take(5)
+      |> Enum.map(&{Players.user_id_from_match(&1["player"]), &1["participantId"]})
+      |> Enum.map(fn {player, participantId} ->
+        info = Enum.find(participants, &(&1["participantId"] == participantId))
+
+        %{
+          "player_id" => player.id,
+          "spell_1" => info["spell1Id"],
+          "spell_2" => info["spell2Id"],
+          "champion_id" => info["championId"],
+          "role" => info["timeline"]["role"],
+          "lane" => info["timeline"]["lane"]
+        }
+      end)
 
     red_players =
       match["participantIdentities"] |> Enum.take(-5) |> Enum.map(&Players.user_id_from_match(&1))
@@ -142,7 +158,16 @@ defmodule ZaunLookup.Matches do
       |> Map.put_new("players", red_players)
       |> Map.update!("win", &if(&1 == "win", do: true, else: false))
 
-    teams = %{blue_team: blue_team, red_team: red_team}
+    winning_team =
+      if red_team["win"] do
+        "red"
+      else
+        "blue"
+      end
+
+    teams =
+      %{blue_team: blue_team, red_team: red_team}
+      |> teams_from_match_detail()
 
     %{
       game_id: match["gameId"],
@@ -152,11 +177,12 @@ defmodule ZaunLookup.Matches do
       game_creation: match["gameCreation"],
       game_duration: match["gameDuration"],
       game_mode: match["gameMode"],
-      game_type: match["gameMode"],
+      game_type: match["gameType"],
       game_version: match["gameVersion"],
       map_id: match["mapId"],
       fetched: true,
-      teams: teams
+      teams: teams,
+      winning_team: winning_team
     }
   end
 
