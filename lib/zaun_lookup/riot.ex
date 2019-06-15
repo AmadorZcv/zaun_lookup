@@ -45,16 +45,20 @@ defmodule ZaunLookup.Riot do
     3
   end
 
-  def update_matches_list(region) do
-    IO.puts("What?")
-    IO.inspect(Players.list_users_matches_to_update(region))
+  def filter_match_list(match) do
+    case match do
+      %{"status" => _status_code} ->
+        false
 
+      %{"matches" => _} ->
+        true
+    end
+  end
+
+  def update_matches_list(region) do
     players_matches =
       Players.list_users_matches_to_update(region)
       |> Enum.map(fn player ->
-        IO.inspect("player")
-        IO.inspect(player)
-
         {player,
          Api.get_matches_by_account_id(
            region.region,
@@ -63,18 +67,22 @@ defmodule ZaunLookup.Riot do
          )}
       end)
 
+    count = Enum.count(players_matches)
+
     players_matches
+    |> Enum.filter(fn {_, match} -> filter_match_list(match) end)
     |> Enum.map(fn {_, match} -> match["matches"] end)
     |> Enum.concat()
     |> Enum.map(fn match -> Map.put_new(match, "region", region.region) end)
     |> Matches.create_matches_from_match_list()
 
     players_matches
-    |> Enum.each(fn {player, matches} ->
-      Players.update_from_match_list(player, Enum.count(matches["matches"]))
+    |> Enum.filter(fn {_, match} -> filter_match_list(match) end)
+    |> Enum.each(fn {player, match} ->
+      Players.update_from_match_list(player, match)
     end)
 
-    Enum.count(players_matches)
+    count
   end
 
   # Pega o id ou cria usuario e retorna o id
@@ -97,6 +105,10 @@ defmodule ZaunLookup.Riot do
   end
 
   def set_match(match, region) do
+    IO.puts("Set MAtch")
+    IO.inspect(Map.keys(match))
+    IO.inspect(match["status"])
+
     participantIdentities =
       Enum.map(match["participantIdentities"], fn participant ->
         Map.put_new(participant, "player_id", get_player_id(participant["player"], region.region))
@@ -108,10 +120,29 @@ defmodule ZaunLookup.Riot do
     )
   end
 
+  def filter_matches(match) do
+    case match do
+      %{"status" => _status_code} ->
+        false
+
+      %{"participantIdentities" => _} ->
+        true
+    end
+  end
+
   def update_matches(region) do
-    Matches.list_matches_to_update(region)
-    |> Enum.map(fn match -> Api.get_match_by_id(region.region, match.game_id) end)
+    IO.puts("Updating")
+
+    matches =
+      Matches.list_matches_to_update(region)
+      |> Enum.map(fn match -> Api.get_match_by_id(region.region, match.game_id) end)
+
+    count = Enum.count(matches)
+
+    matches
+    |> Enum.filter(&filter_matches(&1))
     |> Enum.map(&set_match(&1, region))
-    |> Enum.count()
+
+    count
   end
 end

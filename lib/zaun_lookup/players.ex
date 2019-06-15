@@ -136,13 +136,13 @@ defmodule ZaunLookup.Players do
     User.changeset(user, %{})
   end
 
-  def update_from_match_list(player, match_count) do
-    if match_count == 0 do
+  def update_from_match_list(player, match) do
+    if Enum.count(match["matches"]) == 0 do
       player
       |> update_user(%{begin_index: 0})
     else
       player
-      |> update_user(%{begin_index: player.begin_index + 100})
+      |> update_user(%{begin_index: match["endIndex"]})
     end
   end
 

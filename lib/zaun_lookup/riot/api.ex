@@ -47,11 +47,14 @@ defmodule ZaunLookup.Riot.Api do
 
   def handle_match(url) do
     case request(url) do
+      {:ok, %{"message" => _message, "status_code" => status}} ->
+        %{"status_code" => status}
+
       {:ok, response} ->
         response
 
       {:error, _} ->
-        %{}
+        %{"participantIdentities" => []}
     end
   end
 
