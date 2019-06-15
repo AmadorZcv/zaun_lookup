@@ -123,6 +123,7 @@ defmodule ZaunLookup.Matches do
       |> where([m], m.game_id == ^updated_match[:game_id])
       |> where([m], m.platform_id == ^updated_match[:platform_id])
       |> Repo.one()
+      |> Repo.preload([:teams])
 
     update_match(original_match, updated_match)
   end
