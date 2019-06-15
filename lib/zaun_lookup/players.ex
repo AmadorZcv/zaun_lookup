@@ -160,6 +160,23 @@ defmodule ZaunLookup.Players do
     update_user(user, updated_user)
   end
 
+  def insert_user_from_match(user) do
+    UserFromMatch.from_api(user)
+    |> create_user()
+  end
+
+  def get_user_from_match(riot_id, region) do
+    User
+    |> where([u], u.riot_id == ^riot_id)
+    |> where([u], u.region == ^region)
+    |> Repo.one()
+  end
+
+  def update_user_from_match(user, user_api) do
+    updated_user = UserFromMatch.from_api(user_api)
+    update_user(user, updated_user)
+  end
+
   def user_id_from_match(user) do
     original_user =
       User
