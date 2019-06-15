@@ -21,6 +21,8 @@ defmodule ZaunLookup.Matches do
   def list_matches(limit) do
     Match
     |> limit(^limit)
+    |> where([m], m.fetched)
+    |> preload([:teams])
     |> Repo.all()
   end
 

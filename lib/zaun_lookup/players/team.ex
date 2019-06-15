@@ -41,5 +41,6 @@ defmodule ZaunLookup.Players.Team do
       :dragon_kills
     ])
     |> validate_required([:win, :match_id])
+    |> cast_assoc(:team_players, required: true)
   end
 end

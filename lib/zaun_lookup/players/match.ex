@@ -43,6 +43,7 @@ defmodule ZaunLookup.Players.Match do
       :game_id,
       :region
     ])
+    |> cast_assoc(:teams)
     |> unique_constraint(:unique_on_region, name: :unique_match_on_region)
   end
 end
