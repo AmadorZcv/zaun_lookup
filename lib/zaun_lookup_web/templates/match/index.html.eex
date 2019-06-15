@@ -19,7 +19,7 @@
       <td><%= match.queue_id %></td>
 <td><%= match.region %></td>
 <td><%= match.fetched %></td>
-   
+   <td><%= match.winning_team %></td>
     </tr>
 <% end %>
   </tbody>

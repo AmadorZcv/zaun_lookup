@@ -27,7 +27,9 @@ defmodule ZaunLookup.Matches do
   end
 
   def count_matches() do
-    Repo.aggregate(Match, :count, :id)
+    Match
+    |> where([m], m.fetched)
+    |> Repo.aggregate(:count, :id)
   end
 
   def list_matches_to_update(region) do
