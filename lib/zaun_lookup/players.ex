@@ -8,6 +8,12 @@ defmodule ZaunLookup.Players do
   alias ZaunLookup.Riot.Structs.{UserFromLeague, UserFromMatch, UserFromMatchDetail}
   alias ZaunLookup.Players.User
 
+  @topic inspect(__MODULE__)
+
+  def subscribe do
+    Phoenix.PubSub.subscribe(ZaunLookup.PubSub, @topic)
+  end
+
   @doc """
   Returns the list of users.
 
@@ -31,6 +37,11 @@ defmodule ZaunLookup.Players do
     |> where([u], is_nil(u.account_id))
     |> limit(^region.requests)
     |> Repo.all()
+  end
+
+  def count_players() do
+    User
+    |> Repo.aggregate(:count, :id)
   end
 
   def list_users_matches_to_update(region) do
@@ -74,6 +85,7 @@ defmodule ZaunLookup.Players do
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert()
+    |> notify_subscribers([:player, :created])
   end
 
   @doc """
@@ -92,6 +104,7 @@ defmodule ZaunLookup.Players do
     user
     |> User.changeset(attrs)
     |> Repo.update()
+    |> notify_subscribers([:player, :updated])
   end
 
   @doc """
@@ -194,4 +207,18 @@ defmodule ZaunLookup.Players do
         update_user(original_user, updated_user)
     end
   end
+
+  defp notify_subscribers({:ok, result}, event) do
+    Phoenix.PubSub.broadcast(ZaunLookup.PubSub, @topic, {__MODULE__, event, result})
+
+    Phoenix.PubSub.broadcast(
+      ZaunLookup.PubSub,
+      @topic <> "#{result.id}",
+      {__MODULE__, event, result}
+    )
+
+    {:ok, result}
+  end
+
+  defp notify_subscribers({:error, reason}, _event), do: {:error, reason}
 end

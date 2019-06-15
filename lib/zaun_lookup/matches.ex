@@ -5,6 +5,12 @@ defmodule ZaunLookup.Matches do
   alias ZaunLookup.Players
   alias ZaunLookup.Riot.Structs.MatchFromDetail
 
+  @topic inspect(__MODULE__)
+
+  def subscribe do
+    Phoenix.PubSub.subscribe(ZaunLookup.PubSub, @topic)
+  end
+
   @doc """
   Returns the list of matches.
 
@@ -29,6 +35,12 @@ defmodule ZaunLookup.Matches do
   def count_matches() do
     Match
     |> where([m], m.fetched)
+    |> Repo.aggregate(:count, :id)
+  end
+
+  def count_matches_to_update() do
+    Match
+    |> where([m], not m.fetched)
     |> Repo.aggregate(:count, :id)
   end
 
@@ -73,6 +85,7 @@ defmodule ZaunLookup.Matches do
     %Match{}
     |> Match.changeset(attrs)
     |> Repo.insert()
+    |> notify_subscribers([:match, :created])
   end
 
   def create_matches_from_match_list(matches) do
@@ -114,6 +127,7 @@ defmodule ZaunLookup.Matches do
     match
     |> Match.changeset(attrs, teams)
     |> Repo.update()
+    |> notify_subscribers([:match, :updated])
   end
 
   def update_match_from_match_detail(match) do
@@ -243,4 +257,18 @@ defmodule ZaunLookup.Matches do
   def change_match(%Match{} = match) do
     Match.changeset(match, %{})
   end
+
+  defp notify_subscribers({:ok, result}, event) do
+    Phoenix.PubSub.broadcast(ZaunLookup.PubSub, @topic, {__MODULE__, event, result})
+
+    Phoenix.PubSub.broadcast(
+      ZaunLookup.PubSub,
+      @topic <> "#{result.id}",
+      {__MODULE__, event, result}
+    )
+
+    {:ok, result}
+  end
+
+  defp notify_subscribers({:error, reason}, _event), do: {:error, reason}
 end

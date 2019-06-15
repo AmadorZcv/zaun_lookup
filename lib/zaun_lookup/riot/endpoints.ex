@@ -53,6 +53,6 @@ defmodule ZaunLookup.Riot.Endpoints do
     end
   end
 
-  @regions ["BR", "EUNE", "JP", "KR", "LAN", "LAS", "NA", "OCE", "TR", "RU"]
+  @regions ["BR", "EUNE", "JP", "KR", "LAN", "LAS", "NA", "OCE", "TR", "RU", "EUW"]
   def regions, do: @regions
 end

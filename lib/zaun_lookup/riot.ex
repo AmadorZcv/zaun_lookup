@@ -46,9 +46,15 @@ defmodule ZaunLookup.Riot do
   end
 
   def update_matches_list(region) do
+    IO.puts("What?")
+    IO.inspect(Players.list_users_matches_to_update(region))
+
     players_matches =
       Players.list_users_matches_to_update(region)
       |> Enum.map(fn player ->
+        IO.inspect("player")
+        IO.inspect(player)
+
         {player,
          Api.get_matches_by_account_id(
            region.region,
