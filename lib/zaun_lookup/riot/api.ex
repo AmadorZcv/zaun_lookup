@@ -3,7 +3,7 @@ defmodule ZaunLookup.Riot.Api do
 
   def request(url, headers \\ %{}) do
     headers =
-      %{"X-Riot-Token": "RGAPI-98510066-6f77-4d54-8613-a84fd1aead57"}
+      %{"X-Riot-Token": "RGAPI-736a7234-4b13-4e4a-ba70-c3c38d8b1e09"}
       |> Map.merge(headers)
 
     case HTTPoison.get(url, headers) do
@@ -11,6 +11,8 @@ defmodule ZaunLookup.Riot.Api do
         {:ok, Jason.decode!(response.body)}
 
       {:error, reason} ->
+        IO.puts("Reason é ")
+        IO.inspect(reason)
         {:error, reason}
     end
   end
@@ -54,7 +56,7 @@ defmodule ZaunLookup.Riot.Api do
         response
 
       {:error, _} ->
-        %{"participantIdentities" => []}
+        %{"status" => "asd"}
     end
   end
 

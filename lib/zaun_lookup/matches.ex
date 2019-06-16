@@ -130,13 +130,13 @@ defmodule ZaunLookup.Matches do
     |> notify_subscribers([:match, :updated])
   end
 
-  def update_match_from_match_detail(match) do
+  def update_match_from_match_detail(match, region) do
     updated_match = MatchFromDetail.from_api(match)
 
     original_match =
       Match
       |> where([m], m.game_id == ^updated_match[:game_id])
-      |> where([m], m.platform_id == ^updated_match[:platform_id])
+      |> where([m], m.region == ^region.region)
       |> preload([:teams])
       |> Repo.one()
 

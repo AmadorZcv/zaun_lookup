@@ -180,6 +180,8 @@ defmodule ZaunLookup.Players do
 
   def get_user_from_match(riot_id, region) do
     User
+    |> where([u], not is_nil(u.riot_id))
+    |> where([u], not is_nil(u.region))
     |> where([u], u.riot_id == ^riot_id)
     |> where([u], u.region == ^region)
     |> Repo.one()

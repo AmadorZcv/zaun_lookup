@@ -116,7 +116,8 @@ defmodule ZaunLookup.Riot do
 
     # Atualizar identities com o player_id
     Matches.update_match_from_match_detail(
-      Map.put(match, "participantIdentities", participantIdentities)
+      Map.put(match, "participantIdentities", participantIdentities),
+      region
     )
   end
 
