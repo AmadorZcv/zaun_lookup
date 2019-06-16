@@ -105,10 +105,6 @@ defmodule ZaunLookup.Riot do
   end
 
   def set_match(match, region) do
-    IO.puts("Set MAtch")
-    IO.inspect(Map.keys(match))
-    IO.inspect(match["status"])
-
     participantIdentities =
       Enum.map(match["participantIdentities"], fn participant ->
         Map.put_new(participant, "player_id", get_player_id(participant["player"], region.region))
@@ -133,6 +129,7 @@ defmodule ZaunLookup.Riot do
 
   def update_matches(region) do
     IO.puts("Updating")
+    IO.inspect(region)
 
     matches =
       Matches.list_matches_to_update(region)
