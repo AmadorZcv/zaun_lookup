@@ -3,7 +3,7 @@ defmodule ZaunLookup.Riot.Api do
 
   def request(url, headers \\ %{}) do
     headers =
-      %{"X-Riot-Token": "RGAPI-736a7234-4b13-4e4a-ba70-c3c38d8b1e09"}
+      %{"X-Riot-Token": "RGAPI-67733eab-94ad-4d0a-99be-5efd045e8d3a"}
       |> Map.merge(headers)
 
     case HTTPoison.get(url, headers) do

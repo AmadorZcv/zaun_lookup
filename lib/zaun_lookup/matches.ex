@@ -24,6 +24,11 @@ defmodule ZaunLookup.Matches do
     Repo.all(Match)
   end
 
+  def query_export() do
+    Match
+    |> where([m], m.fetched)
+  end
+
   def list_matches(limit) do
     Match
     |> limit(^limit)

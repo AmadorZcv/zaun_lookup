@@ -86,29 +86,29 @@ defmodule ZaunLookup.Tracker do
 
   def init(_state) do
     # Schedule work to be performed at some point
-    schedule_work()
+    # schedule_work()
     {:ok, "asd"}
   end
 
   def handle_info(:work, state) do
-    top_regions =
-      if should_update_top(state) do
-        IO.puts("First if")
-        top_cycle(@regions)
-      else
-        IO.puts("Second if")
-        @regions
-      end
+    # top_regions =
+    # if should_update_top(state) do
+    # IO.puts("First if")
+    # top_cycle(@regions)
+    # else
+    #   IO.puts("Second if")
+    #   @regions
+    # end
 
-    top_regions
-    |> player_cycle()
+    @regions
     |> match_cycle()
+    |> player_cycle()
     |> match_list_cycle()
 
     # Do the work you desire here
     # Reschedule once more
     schedule_work()
-    {:noreply, manage_top(top_regions, state)}
+    {:noreply, state}
   end
 
   defp schedule_work() do

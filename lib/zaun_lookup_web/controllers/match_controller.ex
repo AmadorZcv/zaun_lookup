@@ -5,8 +5,15 @@ defmodule ZaunLookupWeb.MatchController do
   alias ZaunLookup.Players.Match
 
   def index(conn, _params) do
-    matches = Matches.list_matches(100)
+    matches = Matches.list_matches(40000)
     count = Matches.count_matches()
+    render(conn, "index.html", matches: matches, count: count)
+  end
+
+  def export(conn, _params) do
+    matches = Matches.list_matches(10)
+    count = Matches.count_matches()
+    ZaunLookup.MatchExporter.export(Matches.query_export())
     render(conn, "index.html", matches: matches, count: count)
   end
 

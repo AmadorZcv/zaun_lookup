@@ -45,6 +45,7 @@ defmodule ZaunLookup.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:httpoison, "~> 1.4"},
       {:timex, "~> 3.0"},
+      {:csv, "~> 2.3"},
       {:phoenix_live_view, github: "phoenixframework/phoenix_live_view"}
     ]
   end

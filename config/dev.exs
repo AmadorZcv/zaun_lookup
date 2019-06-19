@@ -7,7 +7,8 @@ config :zaun_lookup, ZaunLookup.Repo,
   database: "zaun_lookup_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
-  pool_size: 10
+  pool_size: 15,
+  timeout: :infinity
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
